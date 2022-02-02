@@ -2,6 +2,7 @@
 // @name     SuperPixiv
 // @version  1
 // @match    https://www.pixiv.net/*
+// @updateURL https://github.com/Tina-otoge/SuperPixiv/raw/master/super-pixiv.user.js
 // ==/UserScript== 
 
 
