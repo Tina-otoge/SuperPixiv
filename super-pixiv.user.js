@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     SuperPixiv
-// @version  1
+// @version  2
 // @match    https://www.pixiv.net/*
 // @updateURL https://github.com/Tina-otoge/SuperPixiv/raw/master/super-pixiv.user.js
 // ==/UserScript== 
@@ -121,4 +121,16 @@ function detect_and_attach2() {
   });
 }
 
+function setup_proxy() {
+  const PROXY_URL = 'https://pixiv.ducks.party';
+  const ORIGINAL_URL = 'https://i.pximg.net';
+  document.querySelectorAll('img').forEach(img => {
+    if (!img.src.startsWith(ORIGINAL_URL))
+      return;
+    console.log(`Replacing ${img.src} -> ${PROXY_URL}`);
+    img.src = PROXY_URL + img.src.slice(ORIGINAL_URL.length);
+  });
+}
+
 setInterval(detect_and_attach2, 500);
+setInterval(setup_proxy, 500);
