@@ -122,7 +122,8 @@ function detect_and_attach2() {
 }
 
 function setup_proxy() {
-  const PROXY_URL = 'https://pixiv.ducks.party';
+  // const PROXY_URL = 'https://pixiv.ducks.party';
+  const PROXY_URL = 'https://pximg.cocomi.eu.org'; // faster
   const ORIGINAL_URL = 'https://i.pximg.net';
   document.querySelectorAll('img').forEach(img => {
     if (!img.src.startsWith(ORIGINAL_URL))
