@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     SuperPixiv
-// @version  2
+// @version  3
 // @match    https://www.pixiv.net/*
 // @updateURL https://github.com/Tina-otoge/SuperPixiv/raw/master/super-pixiv.user.js
 // ==/UserScript== 
@@ -70,39 +70,14 @@ async function insert_viewer(id) {
 }
 
 function detect_and_attach() {
-  const galleries = document.querySelectorAll("[class^='gtm-']");
-  galleries.forEach(gallery => {
-    gallery.querySelectorAll('li').forEach(li => {
-      if (li.dataset.viewer)
-        return;
-      li.dataset.viewer = true;
-      li.style.position = 'relative';
-      const link = li.querySelector('a');
-      const id = link.getAttribute('data-gtm-value');
-      const button = document.createElement('div');
-      button.style.cssText = `
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 60%;
-      `;
-      li.querySelector('div').appendChild(button);
-      button.onclick = (e) => {
-        insert_viewer(id);
-      };
-    });
-  });
-}
-
-function detect_and_attach2() {
   document.querySelectorAll('[type="illust"]').forEach(illust => {
     if (illust.dataset.viewer)
       return;
     illust.dataset.viewer = true;
     const container = illust.parentElement;
-    if (container.children.length != 3)
-      return;
+//  causes viewer to not work on artist pages, disabling until I figure out why I added this check
+//     if (container.children.length != 3)
+//       return;
     container.style.position = 'relative';
     const link = container.querySelector('a');
     const id = link.getAttribute('data-gtm-value');
@@ -133,5 +108,5 @@ function setup_proxy() {
   });
 }
 
-setInterval(detect_and_attach2, 500);
+setInterval(detect_and_attach, 500);
 setInterval(setup_proxy, 500);
