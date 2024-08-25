@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     SuperPixiv
-// @version  4
+// @version  5
 // @match    https://www.pixiv.net/*
 // @updateURL https://github.com/Tina-otoge/SuperPixiv/raw/master/super-pixiv.user.js
 // ==/UserScript== 
@@ -17,7 +17,7 @@ async function insert_viewer(id) {
     background: rgba(0,0,0,.8);
 		display: flex;
 		flex-direction: column;
-		padding-top: 100px;
+		padding-top: 60px;
 		overflow: scroll;
   `;
 
@@ -43,10 +43,9 @@ async function insert_viewer(id) {
     });
     const meta_tag = document.createElement('div');
     meta_tag.innerHTML = `
-			<p>${meta.illustTitle} by ${meta.userName}</p>
-			<p>Date: ${meta.createDate}</p>
+			<p>${meta.illustTitle} by ${meta.userName} on ${meta.createDate}</p>
 			<p>${tags.join(", ")}</p>
-			<p>View: ${meta.viewCount} | Bookmarks: ${meta.bookmarkCount} | Comments: ${meta.commentCount}</p>
+			<p>View: ${meta.viewCount} | Bookmarks: ${meta.bookmarkCount} | Comments: ${meta.commentCount} | Pages: ${meta.pageCount}</p>
 		`;
     meta_tag.style.textAlign = 'center';
     meta_tag.style.color = 'white';
@@ -64,24 +63,24 @@ async function insert_viewer(id) {
       video.controls = true;
       video.loop = true;
       video.style.cssText = `
-      	max-width: 90%;
-        max-height: 90%;
-        margin: 3rem auto;
+      	max-width: calc(100% - 100px);
+        max-height: calc(90% - 200px);
+        margin: 0;
+        position: relative;
+        left: 50px;
       `;
       viewer.appendChild(video);
     } else {
       let pages = await fetch(`https://www.pixiv.net/ajax/illust/${id}/pages?lang=en`);
       pages = await pages.json();
       pages = pages.body;
-      if (pages.length > 1)
-        meta_tag.innerHTML += `<p>Pages: ${pages.length}</p>`;
       pages.forEach(o => {
         const img = document.createElement("img");
         img.src = o.urls.regular;
         img.style.cssText = `
-          margin: 3rem auto;
+          margin: 1rem auto;
           max-width: 90%;
-          max-height: 90%;
+          max-height: calc(100vh - 100px);
         `;
         viewer.appendChild(img);
       });
