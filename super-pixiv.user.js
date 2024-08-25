@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     SuperPixiv
-// @version  3
+// @version  4
 // @match    https://www.pixiv.net/*
 // @updateURL https://github.com/Tina-otoge/SuperPixiv/raw/master/super-pixiv.user.js
 // ==/UserScript== 
@@ -10,14 +10,14 @@ async function insert_viewer(id) {
   const viewer = document.createElement("div");
   viewer.style.cssText = `
     height: 100vh;
-    width: 100vw;
+    width: calc(100vw - 200px);
     position: fixed;
     top: 0;
-    left: 0;
+    left: 100px;
     background: rgba(0,0,0,.8);
 		display: flex;
 		flex-direction: column;
-		padding: 0 3rem;
+		padding-top: 100px;
 		overflow: scroll;
   `;
 
@@ -51,20 +51,41 @@ async function insert_viewer(id) {
     meta_tag.style.textAlign = 'center';
     meta_tag.style.color = 'white';
     meta_tag.style.lineHeight = 1.5;
+    meta_tag.style.width = '100%';
+    meta_tag.style.position = 'fixed';
+    meta_tag.style.top = 0;
     viewer.appendChild(meta_tag);
-    let pages = await fetch(`https://www.pixiv.net/ajax/illust/${id}/pages?lang=en`);
-    pages = await pages.json();
-    pages = pages.body;
-    pages.forEach(o => {
-    	const img = document.createElement("img");
-      img.src = o.urls.regular;
-      img.style.cssText = `
-				margin: 3rem auto;
-				max-width: 90%;
-				max-height: 90%;
-			`;
-      viewer.appendChild(img);
-    });
+    if (meta.illustType == 2) {
+      const video = document.createElement("video");
+      const id = meta.illustId;
+      const prefix = "0" + id.slice(0, 3);
+      video.src = `https://i.ugoira.com/mp4/${prefix}/${id}.mp4`;
+      video.autoplay = true;
+      video.controls = true;
+      video.loop = true;
+      video.style.cssText = `
+      	max-width: 90%;
+        max-height: 90%;
+        margin: 3rem auto;
+      `;
+      viewer.appendChild(video);
+    } else {
+      let pages = await fetch(`https://www.pixiv.net/ajax/illust/${id}/pages?lang=en`);
+      pages = await pages.json();
+      pages = pages.body;
+      if (pages.length > 1)
+        meta_tag.innerHTML += `<p>Pages: ${pages.length}</p>`;
+      pages.forEach(o => {
+        const img = document.createElement("img");
+        img.src = o.urls.regular;
+        img.style.cssText = `
+          margin: 3rem auto;
+          max-width: 90%;
+          max-height: 90%;
+        `;
+        viewer.appendChild(img);
+      });
+    }
   }
   load_data();
 }
