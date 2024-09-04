@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name     SuperPixiv
-// @version  5
+// @version  6
 // @match    https://www.pixiv.net/*
 // @updateURL https://github.com/Tina-otoge/SuperPixiv/raw/master/super-pixiv.user.js
-// ==/UserScript== 
+// ==/UserScript==
 
 
 async function insert_viewer(id) {
@@ -22,11 +22,11 @@ async function insert_viewer(id) {
   `;
 
   document.body.appendChild(viewer);
-  
+
   viewer.onclick = () => {
     document.body.removeChild(viewer);
   };
-  
+
   async function load_data() {
     let meta = await fetch(`https://www.pixiv.net/ajax/illust/${id}?lang=en`);
     meta = await meta.json();
@@ -108,6 +108,7 @@ function detect_and_attach() {
       left: 0;
       width: 100%;
       height: 60%;
+      cursor: zoom-in;
 		`;
     container.appendChild(button);
     button.onclick = (e) => {
