@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     SuperPixiv
-// @version  6
+// @version  7
 // @match    https://www.pixiv.net/*
 // @updateURL https://github.com/Tina-otoge/SuperPixiv/raw/master/super-pixiv.user.js
 // ==/UserScript==
@@ -22,9 +22,11 @@ async function insert_viewer(id) {
   `;
 
   document.body.appendChild(viewer);
+  document.body.style.overflow = 'hidden';
 
   viewer.onclick = () => {
     document.body.removeChild(viewer);
+  	document.body.style.overflow = 'initial';
   };
 
   async function load_data() {
@@ -47,12 +49,15 @@ async function insert_viewer(id) {
 			<p>${tags.join(", ")}</p>
 			<p>View: ${meta.viewCount} | Bookmarks: ${meta.bookmarkCount} | Comments: ${meta.commentCount} | Pages: ${meta.pageCount}</p>
 		`;
-    meta_tag.style.textAlign = 'center';
-    meta_tag.style.color = 'white';
-    meta_tag.style.lineHeight = 1.5;
-    meta_tag.style.width = '100%';
-    meta_tag.style.position = 'fixed';
-    meta_tag.style.top = 0;
+    meta_tag.style.cssText = `
+      text-align: center;
+      color: white;
+      text-shadow: 1px 1px 2px black;
+      line-height: 1.5;
+      width: 100%;
+      position: fixed;
+      top: 0;
+    `;
     viewer.appendChild(meta_tag);
     if (meta.illustType == 2) {
       const video = document.createElement("video");
