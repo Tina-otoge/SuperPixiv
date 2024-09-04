@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     SuperPixiv
-// @version  7
+// @version  8
 // @match    https://www.pixiv.net/*
 // @updateURL https://github.com/Tina-otoge/SuperPixiv/raw/master/super-pixiv.user.js
 // ==/UserScript==
@@ -19,6 +19,7 @@ async function insert_viewer(id) {
 		flex-direction: column;
 		padding-top: 60px;
 		overflow: scroll;
+    cursor: zoom-out;
   `;
 
   document.body.appendChild(viewer);
@@ -73,6 +74,7 @@ async function insert_viewer(id) {
         margin: 0;
         position: relative;
         left: 50px;
+        cursor: default;
       `;
       viewer.appendChild(video);
     } else {
