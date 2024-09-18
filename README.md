@@ -15,4 +15,4 @@ If you want to go to the actual page, you can click at the bottom of the pic or 
 Bandwidth from Pixiv servers to Europe has always been bad, but in the last year it started becoming
 actually unusable. This script replaces all img URLs to use a proxy server with better ping instead.
 
-Currently using: `https://pixiv.ducks.party`
+Currently using: `https://i.pixiv.re`
