@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     SuperPixiv
-// @version  8
+// @version  10
 // @match    https://www.pixiv.net/*
 // @updateURL https://github.com/Tina-otoge/SuperPixiv/raw/master/super-pixiv.user.js
 // ==/UserScript==
@@ -110,6 +110,8 @@ function detect_and_attach() {
     container.style.position = 'relative';
     const link = illust.tagName == "a" ? illust : container.querySelector('a');
     if (!link)
+      return;
+    if (!link.href.includes("/artworks/"))
       return;
     const id = link.getAttribute('data-gtm-value');
     const button = document.createElement('div');
