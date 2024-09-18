@@ -15,10 +15,10 @@ async function insert_viewer(id) {
     top: 0;
     left: 100px;
     background: rgba(0,0,0,.8);
-		display: flex;
-		flex-direction: column;
-		padding-top: 60px;
-		overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    padding-top: 60px;
+    overflow: scroll;
     cursor: zoom-out;
   `;
 
@@ -97,16 +97,20 @@ async function insert_viewer(id) {
 }
 
 function detect_and_attach() {
-  document.querySelectorAll('[type="illust"]').forEach(illust => {
+  document.querySelectorAll('[data-gtm-value]').forEach(illust => {
     if (illust.dataset.viewer)
       return;
     illust.dataset.viewer = true;
+    if (illust.getAttribute('data-gtm-context'))
+        return;
     const container = illust.parentElement;
 //  causes viewer to not work on artist pages, disabling until I figure out why I added this check
 //     if (container.children.length != 3)
 //       return;
     container.style.position = 'relative';
-    const link = container.querySelector('a');
+    const link = illust.tagName == "a" ? illust : container.querySelector('a');
+    if (!link)
+      return;
     const id = link.getAttribute('data-gtm-value');
     const button = document.createElement('div');
     button.style.cssText = `
@@ -125,8 +129,7 @@ function detect_and_attach() {
 }
 
 function setup_proxy() {
-  // const PROXY_URL = 'https://pixiv.ducks.party';
-  const PROXY_URL = 'https://pximg.cocomi.eu.org'; // faster
+  const PROXY_URL = 'https://i.pixiv.re';
   const ORIGINAL_URL = 'https://i.pximg.net';
   document.querySelectorAll('img').forEach(img => {
     if (!img.src.startsWith(ORIGINAL_URL))
