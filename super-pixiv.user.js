@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     SuperPixiv
-// @version  10
+// @version  11
 // @match    https://www.pixiv.net/*
 // @updateURL https://github.com/Tina-otoge/SuperPixiv/raw/master/super-pixiv.user.js
 // ==/UserScript==
@@ -50,6 +50,11 @@ async function insert_viewer(id) {
 			<p>${tags.join(", ")}</p>
 			<p>View: ${meta.viewCount} | Bookmarks: ${meta.bookmarkCount} | Comments: ${meta.commentCount} | Pages: ${meta.pageCount}</p>
 		`;
+    if (meta.aiType == 2) {
+      meta_tag.innerHTML += `
+      	<p style="color: red; font-weight: bold">AI Generated</p>
+    	`
+    }
     meta_tag.style.cssText = `
       text-align: center;
       color: white;
@@ -131,7 +136,7 @@ function detect_and_attach() {
 }
 
 function setup_proxy() {
-  const PROXY_URL = 'https://i.pixiv.re';
+  const PROXY_URL = 'https://i.yuki.sh';
   const ORIGINAL_URL = 'https://i.pximg.net';
   document.querySelectorAll('img').forEach(img => {
     if (!img.src.startsWith(ORIGINAL_URL))
