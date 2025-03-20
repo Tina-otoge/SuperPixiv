@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name     SuperPixiv
-// @version  11
+// @version  12
 // @match    https://www.pixiv.net/*
 // @updateURL https://github.com/Tina-otoge/SuperPixiv/raw/master/super-pixiv.user.js
 // ==/UserScript==
 
+const PROXY_URL = 'https://pximg.perennialte.ch';
 
 async function insert_viewer(id) {
   const viewer = document.createElement("div");
@@ -24,10 +25,11 @@ async function insert_viewer(id) {
 
   document.body.appendChild(viewer);
   document.body.style.overflow = 'hidden';
+    
 
   viewer.onclick = () => {
     document.body.removeChild(viewer);
-  	document.body.style.overflow = 'initial';
+    document.body.style.overflow = 'initial';
   };
 
   async function load_data() {
@@ -65,6 +67,7 @@ async function insert_viewer(id) {
       top: 0;
     `;
     viewer.appendChild(meta_tag);
+    
     if (meta.illustType == 2) {
       const video = document.createElement("video");
       const id = meta.illustId;
@@ -101,8 +104,8 @@ async function insert_viewer(id) {
   load_data();
 }
 
-function detect_and_attach() {
-  document.querySelectorAll('[data-gtm-value]').forEach(illust => {
+function _detect_and_attach(doc) {
+  doc.querySelectorAll('[data-gtm-value], .relative a').forEach(illust => {
     if (illust.dataset.viewer)
       return;
     illust.dataset.viewer = true;
@@ -118,7 +121,10 @@ function detect_and_attach() {
       return;
     if (!link.href.includes("/artworks/"))
       return;
-    const id = link.getAttribute('data-gtm-value');
+    let id = link.getAttribute('data-gtm-value');
+    if (!id) {
+      id =  link.href.split("/")[4];
+    }
     const button = document.createElement('div');
     button.style.cssText = `
       position: absolute;
@@ -135,8 +141,13 @@ function detect_and_attach() {
   });
 }
 
+function detect_and_attach() {
+  _detect_and_attach(document);
+  for (const el of document.querySelectorAll("pixiv-infinite-scroll"))
+    _detect_and_attach(el.shadowRoot);
+}
+
 function setup_proxy() {
-  const PROXY_URL = 'https://i.yuki.sh';
   const ORIGINAL_URL = 'https://i.pximg.net';
   document.querySelectorAll('img').forEach(img => {
     if (!img.src.startsWith(ORIGINAL_URL))
